@@ -98,6 +98,13 @@ func (*User) Insert(param request.UserAdd) error {
 		}
 	}
 
+	if err := query.Model(&model.Profile{}).Create(&model.Profile{
+		UserId: user.Id,
+	}).Error; err != nil {
+		query.Rollback()
+		return err
+	}
+
 	return query.Commit().Error
 }
 

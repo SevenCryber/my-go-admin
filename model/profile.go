@@ -7,5 +7,5 @@ type Profile struct {
 	Address  string
 	Email    string
 	UserId   int
-	NickName string
+	Nickname string
 }
