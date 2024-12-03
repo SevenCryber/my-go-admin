@@ -5,7 +5,6 @@ import (
 	"github.com/SevenCryber/my-go-admin/model/request"
 	"github.com/SevenCryber/my-go-admin/model/response"
 	"github.com/SevenCryber/my-go-admin/service"
-	"github.com/SevenCryber/my-go-admin/token"
 	"github.com/SevenCryber/my-go-admin/utils"
 	"github.com/SevenCryber/my-go-admin/utils/captcha"
 	"github.com/SevenCryber/my-go-admin/utils/password"
@@ -77,7 +76,7 @@ func (*Auth) Login(ctx *gin.Context) {
 		roleCodes = append(roleCodes, role.Code)
 	}
 
-	accessToken := token.GetClaims(response.UserToken{
+	accessToken := utils.GetClaims(response.UserToken{
 		Id:              user.Id,
 		Username:        user.Username,
 		RoleCodes:       roleCodes,
@@ -112,7 +111,7 @@ func (*Auth) SwitchCurrentRole(ctx *gin.Context) {
 		return
 	}
 
-	accessToken := token.GetClaims(response.UserToken{
+	accessToken := utils.GetClaims(response.UserToken{
 		Id:              userId,
 		Username:        username,
 		RoleCodes:       roleCodes,

@@ -3,7 +3,7 @@ package middleware
 import (
 	"github.com/SevenCryber/my-go-admin/initialize/message"
 	"github.com/SevenCryber/my-go-admin/service"
-	"github.com/SevenCryber/my-go-admin/token"
+	"github.com/SevenCryber/my-go-admin/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -11,7 +11,7 @@ import (
 func Authorization() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 
-		userClaims, err := token.ParseToken(ctx)
+		userClaims, err := utils.ParseToken(ctx)
 		if err != nil {
 			message.Error(ctx, 401, err.Error())
 			ctx.Abort()
