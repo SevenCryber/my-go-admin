@@ -1,19 +1,19 @@
 package middleware
 
 import (
-	"github.com/SevenCryber/my-go-admin/initialize/message"
+	"github.com/SevenCryber/my-go-admin/model/response"
 	"github.com/SevenCryber/my-go-admin/service"
 	"github.com/SevenCryber/my-go-admin/utils"
 	"github.com/gin-gonic/gin"
 )
 
-// 鉴权中间件
+// Authorization 鉴权中间件
 func Authorization() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 
 		userClaims, err := utils.ParseToken(ctx)
 		if err != nil {
-			message.Error(ctx, 401, err.Error())
+			response.NewError().SetCode(401).SetMsg(err.Error()).Json(ctx)
 			ctx.Abort()
 			return
 		}
@@ -36,7 +36,7 @@ func Authorization() gin.HandlerFunc {
 
 		if role := (&service.Role{}).GetDetailByCode(userClaims.CurrentRoleCode); role.Id > 0 {
 			if !(&service.RolePermissionsPermission{}).CheckHasPermission(role.Id, permission.Id) {
-				message.Error(ctx, "您目前暂无此权限，请联系管理员申请权限")
+				response.NewError().SetMsg("您目前暂无此权限，请联系管理员申请权限").Json(ctx)
 				ctx.Abort()
 				return
 			}

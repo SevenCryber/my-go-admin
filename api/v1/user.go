@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"github.com/SevenCryber/my-go-admin/initialize/message"
 	"github.com/SevenCryber/my-go-admin/model/request"
 	"github.com/SevenCryber/my-go-admin/model/response"
 	"github.com/SevenCryber/my-go-admin/service"
@@ -42,9 +41,7 @@ func (*User) Detail(ctx *gin.Context) {
 		}
 	}
 
-	message.Success(ctx, map[string]interface{}{
-		"data": userResponse,
-	})
+	response.NewSuccess().SetData("data", userResponse).Json(ctx)
 }
 
 // 获取用户列表
@@ -53,7 +50,7 @@ func (*User) Page(ctx *gin.Context) {
 	var param request.UserPage
 
 	if err := ctx.BindQuery(&param); err != nil {
-		message.Error(ctx, err.Error())
+		response.NewError().SetMsg(err.Error()).Json(ctx)
 		return
 	}
 
@@ -76,12 +73,10 @@ func (*User) Page(ctx *gin.Context) {
 		}
 	}
 
-	message.Success(ctx, map[string]interface{}{
-		"data": map[string]interface{}{
-			"pageData": userPages,
-			"total":    count,
-		},
-	})
+	response.NewSuccess().SetData("data", map[string]interface{}{
+		"pageData": userPages,
+		"total":    count,
+	}).Json(ctx)
 }
 
 // 删除用户
@@ -90,21 +85,21 @@ func (*User) Delete(ctx *gin.Context) {
 	id, _ := strconv.Atoi(ctx.Param("id"))
 
 	if id == 1 {
-		message.Error(ctx, "不能删除根用户")
+		response.NewError().SetMsg("不能删除根用户").Json(ctx)
 		return
 	}
 
 	if id == ctx.GetInt("userId") {
-		message.Error(ctx, "非法操作，不能删除自己")
+		response.NewError().SetMsg("非法操作，不能删除自己").Json(ctx)
 		return
 	}
 
 	if err := (&service.User{}).Delete(id); err != nil {
-		message.Error(ctx, err.Error())
+		response.NewError().SetMsg(err.Error()).Json(ctx)
 		return
 	}
 
-	message.Success(ctx)
+	response.NewSuccess().Json(ctx)
 }
 
 // 添加用户
@@ -113,34 +108,34 @@ func (*User) Add(ctx *gin.Context) {
 	var param request.UserAdd
 
 	if err := ctx.Bind(&param); err != nil {
-		message.Error(ctx, err.Error())
+		response.NewError().SetMsg(err.Error()).Json(ctx)
 		return
 	}
 
 	if param.Username == "" {
-		message.Error(ctx, "用户名不能为空")
+		response.NewError().SetMsg("用户名不能为空").Json(ctx)
 		return
 	}
 
 	if param.Password == "" {
-		message.Error(ctx, "密码不能为空")
+		response.NewError().SetMsg("密码不能为空").Json(ctx)
 		return
 	}
-
+	//response.NewError().SetMsg("用户名已存在").Json(ctx)
 	user := (&service.User{}).GetDetailByUsername(param.Username)
 	if user.Id > 0 {
-		message.Error(ctx, "用户名已存在")
+		response.NewError().SetMsg("用户名已存在").Json(ctx)
 		return
 	}
 
 	param.Password = password.Generate(param.Password)
 
 	if err := (&service.User{}).Insert(param); err != nil {
-		message.Error(ctx, err.Error())
+		response.NewError().SetMsg(err.Error()).Json(ctx)
 		return
 	}
 
-	message.Success(ctx)
+	response.NewSuccess().Json(ctx)
 }
 
 // 修改资料
@@ -151,25 +146,25 @@ func (*User) ProfileUpdate(ctx *gin.Context) {
 	var param request.UserProfileUpdate
 
 	if err := ctx.Bind(&param); err != nil {
-		message.Error(ctx, err.Error())
+		response.NewError().SetMsg(err.Error()).Json(ctx)
 		return
 	}
 
 	userId := ctx.GetInt("userId")
 
 	if id != userId {
-		message.Error(ctx, "越权操作，用户资料只能本人修改")
+		response.NewError().SetMsg("越权操作，用户资料只能本人修改").Json(ctx)
 		return
 	}
 
 	param.Id = id
 
 	if err := (&service.Profile{}).Update(param); err != nil {
-		message.Error(ctx, err.Error())
+		response.NewError().SetMsg(err.Error()).Json(ctx)
 		return
 	}
 
-	message.Success(ctx)
+	response.NewSuccess().Json(ctx)
 }
 
 // 修改密码
@@ -178,7 +173,7 @@ func (*User) PasswordReset(ctx *gin.Context) {
 	var param request.UserUpdate
 
 	if err := ctx.Bind(&param); err != nil {
-		message.Error(ctx, err.Error())
+		response.NewError().SetMsg(err.Error()).Json(ctx)
 		return
 	}
 
@@ -191,11 +186,11 @@ func (*User) PasswordReset(ctx *gin.Context) {
 		Id:       userId,
 		Password: password.Generate(param.Password),
 	}); err != nil {
-		message.Error(ctx, err.Error())
+		response.NewError().SetMsg(err.Error()).Json(ctx)
 		return
 	}
 
-	message.Success(ctx)
+	response.NewSuccess().Json(ctx)
 }
 
 // 修改用户
@@ -204,16 +199,16 @@ func (*User) Update(ctx *gin.Context) {
 	var param request.UserUpdate
 
 	if err := ctx.Bind(&param); err != nil {
-		message.Error(ctx, err.Error())
+		response.NewError().SetMsg(err.Error()).Json(ctx)
 		return
 	}
 
 	param.Id, _ = strconv.Atoi(ctx.Param("id"))
 
 	if err := (&service.User{}).Update(param); err != nil {
-		message.Error(ctx, err.Error())
+		response.NewError().SetMsg(err.Error()).Json(ctx)
 		return
 	}
 
-	message.Success(ctx)
+	response.NewSuccess().Json(ctx)
 }
