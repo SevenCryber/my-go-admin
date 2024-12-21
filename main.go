@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/SevenCryber/my-go-admin/config"
+	"github.com/SevenCryber/my-go-admin/config/task"
 	"github.com/SevenCryber/my-go-admin/initialize/dal"
 	"github.com/SevenCryber/my-go-admin/router"
 	"github.com/gin-gonic/gin"
@@ -17,6 +18,7 @@ func main() {
 
 	// 初始化配置文件
 	config.InitConfig()
+	task.InitTaskConfig()
 
 	// dsn := "user:pass@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&parseTime=True&loc=Local"
 	dsn := config.Data.Mysql.Username + ":" + config.Data.Mysql.Password + "@tcp(" + config.Data.Mysql.Host + ":" + strconv.Itoa(config.Data.Mysql.Port) + ")/" + config.Data.Mysql.Database + "?charset=" + config.Data.Mysql.Charset + "&parseTime=True&loc=Local"

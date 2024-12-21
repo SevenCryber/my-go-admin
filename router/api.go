@@ -2,6 +2,7 @@ package router
 
 import (
 	controller "github.com/SevenCryber/my-go-admin/api/v1"
+	"github.com/SevenCryber/my-go-admin/api/v1/task"
 	"github.com/SevenCryber/my-go-admin/middleware"
 	"github.com/gin-gonic/gin"
 )
@@ -12,6 +13,7 @@ func ApiRegister(server *gin.Engine) {
 	{
 		api.POST("/auth/login", (&controller.Auth{}).Login)    // 登录
 		api.GET("/auth/captcha", (&controller.Auth{}).Captcha) // 验证码
+		api.POST("/auth/kolTask", (&task.KolTask{}).List)      //测试任务列表
 	}
 
 	api = server.Group("/api", middleware.Authorization())

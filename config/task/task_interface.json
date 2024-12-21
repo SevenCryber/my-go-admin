@@ -1,0 +1,27 @@
+{
+  "apis": [
+    {
+      "name": "taskList",
+      "url": "http://127.0.0.1:5000/task/list",
+      "method": "GET",
+      "domain": "QQ",
+      "service": "task"
+
+    },
+    {
+      "name": "taskDetail",
+      "url": "http://127.0.0.1:5000/task/detail",
+      "method": "POST",
+      "domain": "OA",
+      "service": "task"
+
+    },
+    {
+      "name": "taskOrder",
+      "url": "http://127.0.0.1:5000/task/order",
+      "method": "POST",
+      "domain": "OA",
+      "service": "task"
+    }
+  ]
+}
