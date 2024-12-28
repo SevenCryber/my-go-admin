@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/SevenCryber/my-go-admin/config"
 	"github.com/SevenCryber/my-go-admin/config/task"
 	"github.com/SevenCryber/my-go-admin/initialize/dal"
@@ -19,6 +20,14 @@ func main() {
 	// 初始化配置文件
 	config.InitConfig()
 	task.InitTaskConfig()
+	// 初始化全局 logger
+	if err := config.InitLogger(); err != nil {
+		fmt.Printf("Failed to initialize logger: %v\n", err)
+		return
+	}
+	defer func() {
+		_ = config.Logger.Sync() // 确保所有日志都被刷新到磁盘
+	}()
 
 	// dsn := "user:pass@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&parseTime=True&loc=Local"
 	dsn := config.Data.Mysql.Username + ":" + config.Data.Mysql.Password + "@tcp(" + config.Data.Mysql.Host + ":" + strconv.Itoa(config.Data.Mysql.Port) + ")/" + config.Data.Mysql.Database + "?charset=" + config.Data.Mysql.Charset + "&parseTime=True&loc=Local"
@@ -59,6 +68,6 @@ func main() {
 
 	// 注册路由
 	router.ApiRegister(server)
-
+	config.Logger.Info("Application started")
 	server.Run(":" + strconv.Itoa(config.Data.App.Server.Port))
 }
