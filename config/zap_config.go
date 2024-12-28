@@ -60,7 +60,7 @@ func InitLogger() error {
 
 	// 创建核心组件
 	core := zapcore.NewCore(
-		zapcore.NewJSONEncoder(encoderConfig), // 或者使用 zapcore.NewConsoleEncoder(encoderConfig) 对于更友好的控制台输出
+		zapcore.NewConsoleEncoder(encoderConfig), // 或者使用 zapcore.NewConsoleEncoder(encoderConfig) 对于更友好的控制台输出
 		zapcore.AddSync(file),
 		zap.InfoLevel, // 设置最低日志级别
 	)
