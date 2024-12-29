@@ -50,5 +50,11 @@ func ApiRegister(server *gin.Engine) {
 		api.PATCH("/role/users/add/:id", (&controller.Role{}).UsersAdd)       // 分配角色-批量
 		api.PATCH("/role/users/remove/:id", (&controller.Role{}).UsersRemove) // 取消分配角色-批量
 
+		//草稿1
+		api.GET("/order/page", (&controller.User{}).Detail)            // 草稿1列表-分页
+		api.DELETE("/order/:id", (&controller.User{}).Delete)          // 删除草稿1
+		api.PATCH("/order/update", (&controller.User{}).ProfileUpdate) // 修改草稿1信息
+		api.POST("/order/add", (&controller.User{}).Add)               // 新增草稿1
+
 	}
 }
