@@ -145,6 +145,27 @@ CREATE TABLE `user_roles_role`  (
   INDEX `IDX_4be2f7adf862634f5f803d246b`(`role_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic COMMENT = '用户角色表';
 
+DROP TABLE IF EXISTS `orders`;
+CREATE TABLE `orders`  (
+   `order_id` int(11) NOT NULL AUTO_INCREMENT,
+   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+   `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+   `start_time` datetime NOT NULL,
+   `end_time` datetime NOT NULL,
+   `order_audit_person` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+   PRIMARY KEY (`order_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+DROP TABLE IF EXISTS `kol_detail`;
+CREATE TABLE `kol_detail`  (
+    `kol_id` int(11) NOT NULL AUTO_INCREMENT,
+    `order_id` int(11) NOT NULL,
+    `kol_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+    `kol_price` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+    PRIMARY KEY (`kol_id`) USING BTREE,
+    INDEX `order_id`(`order_id`) USING BTREE,
+    CONSTRAINT `kol_detail_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 -- ----------------------------
 -- Records of user_roles_role
 -- ----------------------------

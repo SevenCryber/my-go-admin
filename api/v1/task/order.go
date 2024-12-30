@@ -1,10 +1,10 @@
-package controller
+package task
 
 import (
+	"github.com/SevenCryber/my-go-admin/config"
 	"github.com/SevenCryber/my-go-admin/model/request"
 	"github.com/SevenCryber/my-go-admin/model/response"
 	"github.com/SevenCryber/my-go-admin/service"
-	"github.com/SevenCryber/my-go-admin/utils/password"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -73,36 +73,18 @@ func (*Order) Delete(ctx *gin.Context) {
 // 添加用户
 func (*Order) Add(ctx *gin.Context) {
 
-	var param request.UserAdd
+	var param request.OrderAdd
 
 	if err := ctx.Bind(&param); err != nil {
 		response.NewError().SetMsg(err.Error()).Json(ctx)
 		return
 	}
 
-	if param.Username == "" {
-		response.NewError().SetMsg("用户名不能为空").Json(ctx)
-		return
-	}
-
-	if param.Password == "" {
-		response.NewError().SetMsg("密码不能为空").Json(ctx)
-		return
-	}
-	//response.NewError().SetMsg("用户名已存在").Json(ctx)
-	user := (&service.User{}).GetDetailByUsername(param.Username)
-	if user.Id > 0 {
-		response.NewError().SetMsg("用户名已存在").Json(ctx)
-		return
-	}
-
-	param.Password = password.Generate(param.Password)
-
-	if err := (&service.User{}).Insert(param); err != nil {
+	if err := (&service.Order{}).Insert(param); err != nil {
 		response.NewError().SetMsg(err.Error()).Json(ctx)
 		return
 	}
-
+	config.Logger.Info("数据插入完毕，准备正常返回")
 	response.NewSuccess().Json(ctx)
 }
 

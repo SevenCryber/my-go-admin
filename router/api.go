@@ -14,6 +14,7 @@ func ApiRegister(server *gin.Engine) {
 		api.POST("/auth/login", (&controller.Auth{}).Login)    // 登录
 		api.GET("/auth/captcha", (&controller.Auth{}).Captcha) // 验证码
 		api.POST("/auth/kolTask", (&task.KolTask{}).List)      //测试任务列表
+		api.POST("/order/add", (&task.Order{}).Add)            // 新增订单
 	}
 
 	api = server.Group("/api", middleware.Authorization())
@@ -50,11 +51,10 @@ func ApiRegister(server *gin.Engine) {
 		api.PATCH("/role/users/add/:id", (&controller.Role{}).UsersAdd)       // 分配角色-批量
 		api.PATCH("/role/users/remove/:id", (&controller.Role{}).UsersRemove) // 取消分配角色-批量
 
-		//草稿1
-		api.GET("/order/page", (&controller.User{}).Detail)            // 草稿1列表-分页
-		api.DELETE("/order/:id", (&controller.User{}).Delete)          // 删除草稿1
-		api.PATCH("/order/update", (&controller.User{}).ProfileUpdate) // 修改草稿1信息
-		api.POST("/order/add", (&controller.User{}).Add)               // 新增草稿1
+		//订单
+		api.GET("/order/page", (&task.Order{}).Page)      // 订单-分页
+		api.GET("/order/:id", (&task.Order{}).Delete)     // 删除订单
+		api.POST("/order/update", (&task.Order{}).Update) // 修改订单信息
 
 	}
 }

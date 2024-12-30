@@ -10,13 +10,16 @@ type OrderPage struct {
 }
 
 type OrderAdd struct {
-	TaskID            uint      `gorm:"primaryKey" json:"task_id"`
-	Name              string    `json:"name"`
-	StartTime         time.Time `json:"start_time"`
-	EndTime           time.Time `json:"end_time"`
-	ResponsiblePerson string    `json:"responsible_person"`
-	CreatedAt         time.Time `json:"created_at"`
-	Orders            []Order   `gorm:"foreignKey:TaskID" json:"orders"` // 关联订单
+	Name             string         `json:"name"`
+	StartTime        time.Time      `json:"start_time"`
+	EndTime          time.Time      `json:"end_time"`
+	OrderAuditPerson string         `json:"order_audit_person"`
+	Kol              []KolDetailAdd `json:"kol"` // 关联订单
+}
+
+type KolDetailAdd struct {
+	KolName  string `json:"kol_name"`
+	KolPrice string `json:"kol_price"`
 }
 
 type OrderUpdate struct {
